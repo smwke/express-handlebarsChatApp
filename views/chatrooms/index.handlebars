@@ -1,0 +1,12 @@
+{{#each chatrooms}}
+<div class="card mb-3" style="min-width:fit-content;max-width: 400px">
+  <div class="card-body">
+    <h3 class="card-title">{{name}}</h3>
+    <h6 class="card-subtitle mb-3 text-muted">{{users.length}} connected users</h6>  
+    <a href="/chatrooms/{{_id}}" class="btn btn-primary card-link">Connect</a>
+  </div>
+</div>
+{{else}}
+<p>It seems there are no chat rooms available!</p>
+{{/each}}
+<a href="/chatrooms/add" class="btn btn-primary btn-lg mt-2">Create a new chat room</a>
