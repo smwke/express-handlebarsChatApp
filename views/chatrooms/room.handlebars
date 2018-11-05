@@ -3,13 +3,23 @@
     border: 1px solid grey;
     width: 100%;
     height: 500px;
+    overflow-y: scroll;
+    padding-top:2%;
   }
-
+  #sender{
+    padding-left:1%;
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  }
+  .incoming_msg{
+    width:100%;
+    margin:3px 0 3px;
+  }
 .received_msg {
   display: inline-block;
   padding: 0 0 0 10px;
   vertical-align: top;
   width: 92%;
+
  }
  .received_withd_msg p {
   background: #ebebeb none repeat scroll 0 0;
@@ -26,10 +36,7 @@
   font-size: 12px;
   margin: 8px 0 0;
 }
-.received_withd_msg { 
-  width: 57%;
-}
- .sent_msg p {
+.sent_msg p {
   background: #05728f none repeat scroll 0 0;
   border-radius: 3px;
   font-size: 14px;
@@ -37,13 +44,11 @@
   padding: 5px 10px 5px 12px;
   width:100%;
 }
-.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
+.outgoing_msg{ margin:3px 0 3px;}
 .sent_msg {
   float: right;
-  width: 46%;
+  padding-right: 10px;
 }
-
-
 </style>
 
 <div class="card card-body">
@@ -51,23 +56,7 @@
   <form onsubmit="sendMessage(message.value);return false;">
     <div class="form-group">
       <label for="roomname">chat room</label>
-      <div id="output" class="mb-3">
-        <div class="outgoing_msg">
-          <div class="sent_msg">
-            <p>Apollo University, Delhi, India Test</p>
-            <span class="time_date"> 11:01 AM | Today</span>
-          </div>
-        </div>
-        <div class="incoming_msg">
-          <div class="received_msg">
-            <div class="received_withd_msg">
-              <p>We work directly with our designers and suppliers,
-                and sell direct to you, which means quality, exclusive
-                products, at a price anyone can afford.</p>
-              <span class="time_date"> 11:01 AM | Today</span>
-            </div>
-          </div>
-        </div>
+      <div id="output" class="card mb-3">
 
       </div>
       <div class="input-group">
@@ -83,10 +72,10 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
 <script>
-
+  let separator = true;
   const output = $("#output");
-
   const username = "{{user.name}}";
 
   const socket = io();
@@ -98,14 +87,40 @@
   socket.on("messageReceive", data => {
     console.log("sender: " + data.sender);
     console.log("message: " + data.message);
+    addMessage(data.sender, data.message);
   });
 
   function sendMessage(mes) {
     socket.emit("messageSent", { message: mes });
+
+    const sent_msg = `
+        <div class="outgoing_msg">
+          ${separator?"<hr>":""}
+          <div class="sent_msg">
+            <p>${mes}</p>
+            <span class="time_date">${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}</span>
+          </div>
+        </div>
+  `
+      output.append(sent_msg);
+      separator = false;
   }
 
-  function addMessage() {
-
+  function addMessage(sender, message) {
+    const incoming_msg = `
+        <div class=\"incoming_msg\">
+          ${separator?"":"<hr>"}
+          <div class=\"received_msg\">
+            <div id=\"sender\">${sender}</div>
+            <div class=\"received_withd_msg\">
+              <p>${message}</p>
+              <span class=\"time_date\">${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}</span>
+            </div>
+          </div>
+        </div>
+`
+    output.append(incoming_msg);
+    separator = true;
   }
 
 </script>

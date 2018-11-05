@@ -4,3 +4,19 @@ img{
 html {
     font-size: 1rem;
   }
+  @media screen and (max-width: 50000px) {
+    .received_withd_msg{
+      max-width:57%;
+    }
+    .send_msg{
+      max-width: 43%;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .received_withd_msg{
+      max-width:95%;
+    }
+    .sent_msg{
+      max-width: 95%;
+    }
+  }

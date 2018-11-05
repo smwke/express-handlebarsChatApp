@@ -8,6 +8,9 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 
+require('./models/ChatRoom');
+const ChatRoom = mongoose.model('chatrooms');
+
 //Server + socket.io
 const app = express();
 
@@ -78,11 +81,29 @@ io.on("connection",(socket)=>{
         socket.join(data.room);
         socket.room = data.room;
         socket.name = data.name;
+
     });
     socket.on("messageSent",data=>{
-        console.log(data.message);
-        console.log(socket.room);
-        io.sockets.in(socket.room).emit("messageReceive",{sender:socket.name,message:data.message});
+        console.log("sent a message!");
+
+        ChatRoom.find({},(err,result)=>{
+            console.log(result);
+
+            if(err)throw err;
+            
+            let index = result.findIndex(x=>x.name == socket.room);
+            console.log(socket.room);
+            console.log(index);
+            if(index < 0){
+                return;
+            }
+            console.log("someone wrote a message on "+result[index].name)
+            result[index].messages.push({sender:socket.name,text:data.message});
+            result[index].save();
+
+        });
+        socket.broadcast.in(socket.room).emit("messageReceive",{sender:socket.name,message:data.message});
+        //io.sockets.in(socket.room).emit("messageReceive",{sender:socket.name,message:data.message});
     });
 });
 
