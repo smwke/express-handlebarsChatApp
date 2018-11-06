@@ -78,15 +78,13 @@ const io = require('socket.io')(http);
 //require('./server-socket')(io);
 
 io.on("connection",(socket)=>{
-
-
     socket.on("subscribe",data=>{
         socket.join(data.room);
         socket.room = data.room;
         socket.name = data.name;
         ChatRoom.find({name:socket.room},(err,result)=>{
             if(err)throw err;
-            socket.emit("messageList",result[0].messages);
+            if(result[0].messages)socket.emit("messageList",result[0].messages);
         });
     });
     socket.on("messageSent",data=>{
