@@ -126,7 +126,7 @@ app.get('/', (req, res) => {
 app.use("/users",users);
 app.use("/chatrooms",chatrooms);
 
-const port = 4200;
+const port = 10101;
 
 http.listen(port,()=>{
     console.log("Sever started on port "+port);
