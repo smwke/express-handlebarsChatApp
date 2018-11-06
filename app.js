@@ -25,7 +25,7 @@ require('./config/passport')(passport);
 //mongoose.Promise = global.Promise;
 
 // Connect to mongoose
-mongoose.connect('mongodb://<smwke>:<dorin_28469>@ds253783.mlab.com:53783/chatapp', {
+mongoose.connect('mongodb://smwke:dorin_28469@ds253783.mlab.com:53783/chatapp', {
     useNewUrlParser: true
 },(err)=>{
     if(err)throw err;
