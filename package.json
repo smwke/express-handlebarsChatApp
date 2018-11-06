@@ -4,7 +4,7 @@
   "description": "chatroom site with login/registration",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app"
   },
   "author": "Dorin Cascaval",
   "license": "ISC",
