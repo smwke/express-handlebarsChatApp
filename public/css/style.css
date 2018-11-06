@@ -4,19 +4,27 @@ img{
 html {
     font-size: 1rem;
   }
-  @media screen and (max-width: 50000px) {
-    .received_withd_msg{
-      max-width:57%;
-    }
-    .send_msg{
-      max-width: 43%;
-    }
+  .send_msg{
+    background-color: red;
   }
-  @media screen and (max-width: 768px) {
+
+  @media (max-width: 768px) {
     .received_withd_msg{
-      max-width:95%;
+      width: fit-content;
+      max-width:90%;
     }
     .sent_msg{
-      max-width: 95%;
+      width: fit-content;
+      max-width: 90%;
+    }
+  }
+  @media (min-width: 769px) {
+    .received_withd_msg{
+      width: fit-content;
+      max-width:50%;
+    }
+    .sent_msg{
+      width: fit-content;
+      max-width: 50%;
     }
   }

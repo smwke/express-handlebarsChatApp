@@ -42,12 +42,12 @@
   font-size: 14px;
   margin: 0; color:#fff;
   padding: 5px 10px 5px 12px;
-  width:100%;
 }
 .outgoing_msg{ margin:3px 0 3px;}
 .sent_msg {
   float: right;
   padding-right: 10px;
+
 }
 </style>
 
@@ -76,12 +76,25 @@
 <script>
   let separator = true;
   const output = $("#output");
-  const username = "{{user.name}}";
 
   const socket = io();
+
   socket.emit("subscribe", {
     room: "{{room.name}}",
     name: "{{user.name}}"
+  });
+
+  socket.on("messageList", data => {
+    if (data) {
+      data.forEach((message) => {
+        if (message.sender == "{{user.name}}") {
+          DrawSentMessage(message.text, message.date);
+        } else {
+          DrawReceivedMessage(message.sender, message.text, message.date);
+        }
+      });
+    }
+
   });
 
   socket.on("messageReceive", data => {
@@ -90,37 +103,53 @@
     addMessage(data.sender, data.message);
   });
 
-  function sendMessage(mes) {
-    socket.emit("messageSent", { message: mes });
-
-    const sent_msg = `
+  function DrawSentMessage(message, date) {
+  /*  const sent_msg = `
         <div class="outgoing_msg">
-          ${separator?"<hr>":""}
+          ${separator ? "<hr>" : ""}
           <div class="sent_msg">
-            <p>${mes}</p>
-            <span class="time_date">${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}</span>
+            <p>${message}</p>
+            <span class="time_date">${date}</span>
           </div>
         </div>
-  `
-      output.append(sent_msg);
-      separator = false;
-  }
+  `;*/
+  let sent_msg = document.createElement("div");
+  sent_msg.classList.add("outgoing_msg");
+  sent_msg.innerHTML = `${separator ? "<hr>" : ""}
+                <div class="sent_msg">
+                  <p>${message}</p>
+                  <span class="time_date">${date}</span>
+                </div>`
 
-  function addMessage(sender, message) {
+    output.append(sent_msg);
+    separator = false;
+  }
+  function DrawReceivedMessage(sender, message, date) {
     const incoming_msg = `
         <div class=\"incoming_msg\">
-          ${separator?"":"<hr>"}
+          ${separator ? "" : "<hr>"}
           <div class=\"received_msg\">
             <div id=\"sender\">${sender}</div>
             <div class=\"received_withd_msg\">
               <p>${message}</p>
-              <span class=\"time_date\">${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}</span>
+              <span class=\"time_date\">${date}</span>
             </div>
           </div>
         </div>
-`
+`;
     output.append(incoming_msg);
     separator = true;
+  }
+
+  function sendMessage(mes) {
+    socket.emit("messageSent", { message: mes });
+    let currentDate = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
+    DrawSentMessage(mes, currentDate);
+  }
+
+  function addMessage(sender, message) {
+    let currentDate = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
+    DrawReceivedMessage(sender, message, currentDate);
   }
 
 </script>
