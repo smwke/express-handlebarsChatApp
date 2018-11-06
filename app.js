@@ -25,13 +25,18 @@ require('./config/passport')(passport);
 //mongoose.Promise = global.Promise;
 
 // Connect to mongoose
-mongoose.connect('mongodb://smwke:dorin_28469@ds253783.mlab.com:53783/chatapp', {
-    useNewUrlParser: true
-},(err)=>{
-    if(err)throw err;
-    else console.log("MongoDB connected...")
-})
 
+
+mongoose.connect("mongodb://@ds253783.mlab.com:53783/chatapp", {
+    useNewUrlParser: true,
+    auth: {
+      user: 'smwke',
+      password: 'dorin_28469'
+    }
+  },(err)=>{
+      if(err)throw err;
+      console.log("MongoDB connected...");
+  });
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
     defaultLayout: 'main'
