@@ -122,8 +122,6 @@ app.get('/', (req, res) => {
 app.use("/users",users);
 app.use("/chatrooms",chatrooms);
 
-const port = process.env.port || 10101;
-
-http.listen(port,()=>{
+http.listen(process.env.port || 10101,()=>{
     console.log("Sever started on port "+port);
 });
