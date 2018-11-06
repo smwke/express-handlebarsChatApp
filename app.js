@@ -123,5 +123,5 @@ app.use("/users",users);
 app.use("/chatrooms",chatrooms);
 
 http.listen(process.env.port || 10101,()=>{
-    console.log("Sever started on port "+port);
+    console.log("Sever started");
 });
