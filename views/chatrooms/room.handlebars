@@ -5,6 +5,7 @@
     height: 500px;
     overflow-y: scroll;
     padding-top:2%;
+    box-sizing: border-box;
   }
   #sender{
     padding-left:1%;
@@ -60,7 +61,7 @@
 
       </div>
       <div class="input-group">
-        <input type="text" class="form-control width100" name="message" required>
+        <input id="messageinput" type="text" class="form-control width100" name="message" required>
         <span class="input-group-btn">
           <button type="submit" class="btn btn-primary">Send</button>
         </span>
@@ -76,7 +77,7 @@
 <script>
   let separator = true;
   const output = $("#output");
-
+  const messageInput = $("#messageinput");
   const socket = io();
 
   socket.emit("subscribe", {
@@ -98,24 +99,18 @@
   });
 
   socket.on("messageReceive", data => {
-    console.log("sender: " + data.sender);
-    console.log("message: " + data.message);
+    let scroll = false;
+    if (output[0].scrollHeight - output.scrollTop() < (output.outerHeight() + 100)) {
+      scroll = true;
+    }
     addMessage(data.sender, data.message);
+    if (scroll === true) output[0].scrollTop = output[0].scrollHeight;
   });
 
   function DrawSentMessage(message, date) {
-  /*  const sent_msg = `
-        <div class="outgoing_msg">
-          ${separator ? "<hr>" : ""}
-          <div class="sent_msg">
-            <p>${message}</p>
-            <span class="time_date">${date}</span>
-          </div>
-        </div>
-  `;*/
-  let sent_msg = document.createElement("div");
-  sent_msg.classList.add("outgoing_msg");
-  sent_msg.innerHTML = `${separator ? "<hr>" : ""}
+    let sent_msg = document.createElement("div");
+    sent_msg.classList.add("outgoing_msg");
+    sent_msg.innerHTML = `${separator ? "<hr>" : ""}
                 <div class="sent_msg">
                   <p>${message}</p>
                   <span class="time_date">${date}</span>
@@ -142,9 +137,15 @@
   }
 
   function sendMessage(mes) {
+    let scroll = false;
+    if (output[0].scrollHeight - output.scrollTop() < (output.outerHeight() + 100)) {
+      scroll = true;
+    }
+    messageInput.val("");
     socket.emit("messageSent", { message: mes });
     let currentDate = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
     DrawSentMessage(mes, currentDate);
+    if (scroll === true) output[0].scrollTop = output[0].scrollHeight;
   }
 
   function addMessage(sender, message) {

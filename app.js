@@ -34,11 +34,22 @@ mongoose.connect("mongodb://dorin:dorin_28469@ds253783.mlab.com:53783/chatapp", 
       console.log("MongoDB connected...");
   });
 // Handlebars Middleware
+
+
 app.engine('handlebars', exphbs({
-    defaultLayout: 'main'
+    defaultLayout: 'main',
+    helpers: require("./helpers/helpers")
 }));
 app.set('view engine', 'handlebars');
-
+/*
+exphbs.registerHelper('is',(a,b,opts)=>{
+    if(a === b){
+        return opts.fn(this);
+    }else{
+        return opts.inverse(this);
+    }
+});
+*/
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -88,20 +99,14 @@ io.on("connection",(socket)=>{
         });
     });
     socket.on("messageSent",data=>{
-        console.log("sent a message!");
-
         ChatRoom.find({},(err,result)=>{
-            console.log(result);
 
             if(err)throw err;
             
             let index = result.findIndex(x=>x.name == socket.room);
-            console.log(socket.room);
-            console.log(index);
             if(index < 0){
                 return;
             }
-            console.log("someone wrote a message on "+result[index].name)
             result[index].messages.push({sender:socket.name,text:data.message});
             result[index].save();
 

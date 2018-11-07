@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const ChatRoomSchema = new Schema({
+    creator: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true

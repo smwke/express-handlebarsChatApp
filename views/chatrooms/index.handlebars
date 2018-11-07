@@ -4,6 +4,12 @@
     <h3 class="card-title">{{name}}</h3>
     <h6 class="card-subtitle mb-3 text-muted">{{users.length}} connected users</h6>  
     <a href="/chatrooms/{{_id}}" class="btn btn-primary card-link">Connect</a>
+    {{#ifeq creator ../user.name}}
+    <form method="POST" action="/chatrooms/{{name}}?_method=DELETE">
+      <input type="submit" class = "btn btn-danger card-link" value="Delete">
+    </form>
+    <!--a href="/chatrooms/{{_id}}" class="">{{creator}}.{{../user.name}}Delete</a-->
+    {{/ifeq}}
   </div>
 </div>
 {{else}}

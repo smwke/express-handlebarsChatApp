@@ -24,6 +24,10 @@ router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('chatrooms/add');
 });
 
+router.delete('/:name',ensureAuthenticated, (req,res)=>{
+    
+})
+
 // Process Form
 router.post('/', ensureAuthenticated, (req, res) => {
     let errors = [];
@@ -37,7 +41,9 @@ router.post('/', ensureAuthenticated, (req, res) => {
             roomname: req.body.roomname
         });
     } else {
+        console.log("someone is creating a new chatroom , he is: "+res.locals.user.name);
         const newRoom = {
+            creator: res.locals.user.name,
             name: req.body.roomname
         }
         new ChatRoom(newRoom)
