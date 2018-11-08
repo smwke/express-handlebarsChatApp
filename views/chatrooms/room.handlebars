@@ -2,7 +2,7 @@
   #output{
     border: 1px solid grey;
     width: 100%;
-    height: 500px;
+    height: 49vh;
     overflow-y: scroll;
     padding-top:2%;
     box-sizing: border-box;
@@ -10,6 +10,9 @@
   #sender{
     padding-left:1%;
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  }
+  .card{
+    height:90%;
   }
   .incoming_msg{
     width:100%;
@@ -61,7 +64,7 @@
 
       </div>
       <div class="input-group">
-        <input id="messageinput" type="text" class="form-control width100" name="message" required>
+        <input id="messageinput" type="text" class="form-control width100" name="message" autocomplete="off" required>
         <span class="input-group-btn">
           <button type="submit" class="btn btn-primary">Send</button>
         </span>
@@ -79,6 +82,18 @@
   const output = $("#output");
   const messageInput = $("#messageinput");
   const socket = io();
+
+  var _originalSize = $(window).width() + $(window).height();
+  $(window).resize(function () {
+    if ($(window).width() + $(window).height() != _originalSize) {
+      console.log("keyboard show up");
+      output[0].scrollTop = output[0].scrollHeight;
+    } else {
+      console.log("keyboard closed");
+      output[0].scrollTop = output[0].scrollHeight;
+      
+    }
+  });
 
   socket.emit("subscribe", {
     room: "{{room.name}}",

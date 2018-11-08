@@ -8,17 +8,22 @@ html {
     background-color: red;
   }
 
+
+
   @media (max-width: 768px) {
     .received_withd_msg{
       width: fit-content;
       max-width:90%;
+    }
+    .btn{
+      margin-bottom: 1%;
     }
     .sent_msg{
       width: fit-content;
       max-width: 90%;
     }
   }
-  @media (min-width: 769px) {
+  @media (min-width: 768px) {
     .received_withd_msg{
       width: fit-content;
       max-width:50%;

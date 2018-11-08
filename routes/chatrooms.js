@@ -25,6 +25,11 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 });
 
 router.delete('/:name',ensureAuthenticated, (req,res)=>{
+    ChatRoom.deleteOne({name:req.params.name},(err,result)=>{
+        if(err)throw err;
+        req.flash('success_msg', 'chat room deleted');
+        res.redirect('/chatrooms/');
+    });
     
 })
 
@@ -41,7 +46,6 @@ router.post('/', ensureAuthenticated, (req, res) => {
             roomname: req.body.roomname
         });
     } else {
-        console.log("someone is creating a new chatroom , he is: "+res.locals.user.name);
         const newRoom = {
             creator: res.locals.user.name,
             name: req.body.roomname
